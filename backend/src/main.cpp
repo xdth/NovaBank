@@ -3,14 +3,11 @@
 #include <iostream>
 #include <memory>
 
-// Include database
-#include "db/db.h"
-
 // Include controllers
 #include "api/user/user_controller.h"
+#include "api/account/account_controller.h"
 
 // Forward declarations for components we'll add later
-// #include "api/account/account_controller.h"
 // #include "api/transaction/transaction_controller.h"
 
 int main() {
@@ -85,10 +82,10 @@ int main() {
     UserController userController(db);
     userController.registerRoutes(app);
     
-    // TODO: Register other controllers
-    // AccountController accountController(db);
-    // accountController.registerRoutes(app);
+    AccountController accountController(db);
+    accountController.registerRoutes(app);
     
+    // TODO: Register other controllers
     // TransactionController transactionController(db);
     // transactionController.registerRoutes(app);
     
