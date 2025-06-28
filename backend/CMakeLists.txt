@@ -40,6 +40,12 @@ set(SOURCES
     
     # Domain models
     src/domain/user/user.cpp
+    
+    # Repositories
+    src/repository/user/user_repository.cpp
+    
+    # API Controllers
+    src/api/user/user_controller.cpp
     # src/domain/account/account.cpp
     # src/domain/transaction/transaction.cpp
     

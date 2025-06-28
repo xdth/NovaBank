@@ -6,8 +6,10 @@
 // Include database
 #include "db/db.h"
 
+// Include controllers
+#include "api/user/user_controller.h"
+
 // Forward declarations for components we'll add later
-// #include "api/user/user_controller.h"
 // #include "api/account/account_controller.h"
 // #include "api/transaction/transaction_controller.h"
 
@@ -79,10 +81,11 @@ int main() {
         return crow::response(dbWorking ? 200 : 500, response);
     });
     
-    // TODO: Register controllers
-    // UserController userController(db);
-    // userController.registerRoutes(app);
+    // Register controllers
+    UserController userController(db);
+    userController.registerRoutes(app);
     
+    // TODO: Register other controllers
     // AccountController accountController(db);
     // accountController.registerRoutes(app);
     
