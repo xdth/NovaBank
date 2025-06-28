@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Find required packages
 find_package(Threads REQUIRED)
 find_package(SQLite3 REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 # Try to find nlohmann_json, if not found, fetch it
 find_package(nlohmann_json QUIET)
@@ -35,10 +36,10 @@ FetchContent_MakeAvailable(crow)
 set(SOURCES
     src/main.cpp
     # Database
-    # src/db/db.cpp
+    src/db/db.cpp
     
     # Domain models
-    # src/domain/user/user.cpp
+    src/domain/user/user.cpp
     # src/domain/account/account.cpp
     # src/domain/transaction/transaction.cpp
     
@@ -69,6 +70,8 @@ target_include_directories(novabank PRIVATE
 target_link_libraries(novabank PRIVATE
     Crow::Crow
     ${SQLite3_LIBRARIES}
+    OpenSSL::SSL
+    OpenSSL::Crypto
     Threads::Threads
 )
 
@@ -80,8 +83,8 @@ else()
 endif()
 
 # Copy database migrations to build directory
-# configure_file(
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src/db/migrations.sql
-#     ${CMAKE_CURRENT_BINARY_DIR}/migrations.sql
-#     COPYONLY
-# )
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/db/migrations.sql
+    ${CMAKE_CURRENT_BINARY_DIR}/migrations.sql
+    COPYONLY
+)

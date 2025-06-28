@@ -3,8 +3,10 @@
 #include <iostream>
 #include <memory>
 
+// Include database
+#include "db/db.h"
+
 // Forward declarations for components we'll add later
-// #include "db/db.h"
 // #include "api/user/user_controller.h"
 // #include "api/account/account_controller.h"
 // #include "api/transaction/transaction_controller.h"
@@ -46,8 +48,36 @@ int main() {
         return crow::response(200, response);
     });
     
-    // TODO: Initialize database connection
-    // auto db = std::make_shared<Database>("novabank.db");
+    // Initialize database connection
+    std::shared_ptr<Database> db;
+    try {
+        db = std::make_shared<Database>("novabank.db");
+        std::cout << "✅ Database initialized successfully" << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "❌ Failed to initialize database: " << e.what() << std::endl;
+        return 1;
+    }
+    
+    // Test endpoint to verify database is working
+    CROW_ROUTE(app, "/api/v1/test/db")
+    .methods("GET"_method)
+    ([db](const crow::request&) {
+        crow::json::wvalue response;
+        bool dbWorking = false;
+        int userCount = 0;
+        
+        // Test database with a simple query
+        db->query("SELECT COUNT(*) FROM users", [&dbWorking, &userCount](sqlite3_stmt* stmt) {
+            dbWorking = true;
+            userCount = sqlite3_column_int(stmt, 0);
+        });
+        
+        response["database_connected"] = dbWorking;
+        response["user_count"] = userCount;
+        response["message"] = dbWorking ? "Database is working" : "Database connection failed";
+        
+        return crow::response(dbWorking ? 200 : 500, response);
+    });
     
     // TODO: Register controllers
     // UserController userController(db);
