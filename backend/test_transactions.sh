@@ -16,22 +16,24 @@ LOGIN_RESPONSE=$(curl -s -X POST $BASE_URL/auth/login \
 TOKEN=$(echo $LOGIN_RESPONSE | grep -o '"token":"[^"]*' | grep -o '[^"]*$')
 echo "✅ Admin token: ${TOKEN:0:10}..."
 
-# Get admin's accounts
-echo -e "\n2️⃣ Getting admin's accounts..."
-ACCOUNTS=$(curl -s -X GET $BASE_URL/accounts \
-  -H "Authorization: Bearer $TOKEN")
-echo $ACCOUNTS | jq '.'
+# Create accounts for admin first
+echo -e "\n2️⃣ Creating checking account for admin..."
+ADMIN_CHECKING=$(curl -s -X POST $BASE_URL/accounts \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"accountType": "checking", "initialBalance": 1000.00}')
+echo $ADMIN_CHECKING | jq '.'
 
-# Extract first account ID for testing
-ACCOUNT_ID=$(echo $ACCOUNTS | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
-echo "Using Account ID: $ACCOUNT_ID"
+ACCOUNT_NUMBER=$(echo $ADMIN_CHECKING | grep -o '"accountNumber":"[^"]*' | sed 's/"accountNumber":"//')
+ACCOUNT_ID=$(echo $ADMIN_CHECKING | grep -o '"id":[0-9]*' | grep -o '[0-9]*')
+echo "Created Account Number: $ACCOUNT_NUMBER (ID: $ACCOUNT_ID)"
 
 # Test deposit
 echo -e "\n3️⃣ Testing deposit..."
 DEPOSIT_RESPONSE=$(curl -s -X POST $BASE_URL/transactions/deposit \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
-  -d "{\"accountId\": $ACCOUNT_ID, \"amount\": 500.00, \"description\": \"Salary deposit\"}")
+  -d "{\"accountNumber\": \"$ACCOUNT_NUMBER\", \"amount\": 500.00, \"description\": \"Salary deposit\"}")
 echo $DEPOSIT_RESPONSE | jq '.'
 
 # Test withdrawal
@@ -39,7 +41,7 @@ echo -e "\n4️⃣ Testing withdrawal..."
 WITHDRAW_RESPONSE=$(curl -s -X POST $BASE_URL/transactions/withdraw \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
-  -d "{\"accountId\": $ACCOUNT_ID, \"amount\": 50.00, \"description\": \"ATM withdrawal\"}")
+  -d "{\"accountNumber\": \"$ACCOUNT_NUMBER\", \"amount\": 50.00, \"description\": \"ATM withdrawal\"}")
 echo $WITHDRAW_RESPONSE | jq '.'
 
 # Create a second user and account for transfer test
@@ -66,13 +68,14 @@ USER_ACCOUNT=$(curl -s -X POST $BASE_URL/accounts \
 echo $USER_ACCOUNT | jq '.'
 
 USER_ACCOUNT_NUMBER=$(echo $USER_ACCOUNT | grep -o '"accountNumber":"[^"]*' | sed 's/"accountNumber":"//')
+echo "User Account Number: $USER_ACCOUNT_NUMBER"
 
 # Test transfer
 echo -e "\n8️⃣ Testing transfer..."
 TRANSFER_RESPONSE=$(curl -s -X POST $BASE_URL/transactions/transfer \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
-  -d "{\"fromAccountId\": $ACCOUNT_ID, \"toAccountNumber\": \"$USER_ACCOUNT_NUMBER\", \"amount\": 100.00, \"description\": \"Payment to Jane\"}")
+  -d "{\"fromAccountNumber\": \"$ACCOUNT_NUMBER\", \"toAccountNumber\": \"$USER_ACCOUNT_NUMBER\", \"amount\": 100.00, \"description\": \"Payment to Jane\"}")
 echo $TRANSFER_RESPONSE | jq '.'
 
 # Get transaction history
@@ -86,7 +89,7 @@ curl -s -X GET "$BASE_URL/transactions?type=deposit" \
   -H "Authorization: Bearer $TOKEN" | jq '.'
 
 # Get specific transaction
-echo -e "\n1️⃣1️⃣ Getting specific transaction..."
+echo -e "\n1️⃣1️⃣ Getting specific transaction (ID: 1)..."
 curl -s -X GET $BASE_URL/transactions/1 \
   -H "Authorization: Bearer $TOKEN" | jq '.'
 
@@ -95,11 +98,20 @@ echo -e "\n1️⃣2️⃣ Testing withdrawal with insufficient funds..."
 curl -s -X POST $BASE_URL/transactions/withdraw \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
-  -d "{\"accountId\": $ACCOUNT_ID, \"amount\": 10000.00}" | jq '.'
+  -d "{\"accountNumber\": \"$ACCOUNT_NUMBER\", \"amount\": 10000.00, \"description\": \"Large withdrawal\"}" | jq '.'
 
 # Check final balances
-echo -e "\n1️⃣3️⃣ Final account balances..."
+echo -e "\n1️⃣3️⃣ Final account balances for admin..."
 curl -s -X GET $BASE_URL/accounts \
+  -H "Authorization: Bearer $TOKEN" | jq '.'
+
+echo -e "\n1️⃣4️⃣ Final account balances for jane_doe..."
+curl -s -X GET $BASE_URL/accounts \
+  -H "Authorization: Bearer $USER_TOKEN" | jq '.'
+
+# Test account-specific transaction history
+echo -e "\n1️⃣5️⃣ Getting transactions for specific account..."
+curl -s -X GET "$BASE_URL/transactions?accountId=$ACCOUNT_ID" \
   -H "Authorization: Bearer $TOKEN" | jq '.'
 
 echo -e "\n✨ Transaction tests complete!"

@@ -1,7 +1,7 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-06-28T22:00:00.000Z",
+  "__export_date": "2025-06-29T13:00:00.000Z",
   "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
     {
@@ -315,6 +315,359 @@
       "_type": "request"
     },
     {
+      "_id": "req_get_accounts",
+      "parentId": "fld_accounts",
+      "modified": 1719614000000,
+      "created": 1719614000000,
+      "url": "{{ _.base_url }}/api/v1/accounts",
+      "name": "Get All Accounts",
+      "description": "Get all accounts for current user (or all accounts if admin)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719614000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_account",
+      "parentId": "fld_accounts",
+      "modified": 1719614100000,
+      "created": 1719614100000,
+      "url": "{{ _.base_url }}/api/v1/accounts/1",
+      "name": "Get Account by ID",
+      "description": "Get a specific account by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719614100000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_account",
+      "parentId": "fld_accounts",
+      "modified": 1719614200000,
+      "created": 1719614200000,
+      "url": "{{ _.base_url }}/api/v1/accounts",
+      "name": "Create Account",
+      "description": "Create a new account",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"accountType\": \"checking\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719614200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_account_admin",
+      "parentId": "fld_accounts",
+      "modified": 1719614250000,
+      "created": 1719614250000,
+      "url": "{{ _.base_url }}/api/v1/accounts",
+      "name": "Create Account (Admin)",
+      "description": "Create account with initial balance for any user (admin only)",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"accountType\": \"savings\",\n  \"userId\": 2,\n  \"initialBalance\": 1000.00\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719614250000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfer",
+      "parentId": "fld_accounts",
+      "modified": 1719614300000,
+      "created": 1719614300000,
+      "url": "{{ _.base_url }}/api/v1/accounts/1/transfer",
+      "name": "Transfer Money",
+      "description": "Transfer money from one account to another",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": 100.50,\n  \"toAccountNumber\": \"ACC12345678\",\n  \"description\": \"Payment\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719614300000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_transactions",
+      "parentId": "fld_transactions",
+      "modified": 1719615000000,
+      "created": 1719615000000,
+      "url": "{{ _.base_url }}/api/v1/transactions",
+      "name": "Get Transactions",
+      "description": "Get transaction history with optional filters",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "accountId",
+          "value": "",
+          "disabled": true
+        },
+        {
+          "name": "type",
+          "value": "",
+          "disabled": true
+        },
+        {
+          "name": "startDate",
+          "value": "",
+          "disabled": true
+        },
+        {
+          "name": "endDate",
+          "value": "",
+          "disabled": true
+        },
+        {
+          "name": "limit",
+          "value": "100",
+          "disabled": true
+        },
+        {
+          "name": "offset",
+          "value": "0",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719615000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_transaction",
+      "parentId": "fld_transactions",
+      "modified": 1719615100000,
+      "created": 1719615100000,
+      "url": "{{ _.base_url }}/api/v1/transactions/1",
+      "name": "Get Transaction by ID",
+      "description": "Get a specific transaction by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719615100000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_deposit",
+      "parentId": "fld_transactions",
+      "modified": 1719615200000,
+      "created": 1719615200000,
+      "url": "{{ _.base_url }}/api/v1/transactions/deposit",
+      "name": "Deposit",
+      "description": "Deposit money into an account",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"accountNumber\": \"ACC12345678\",\n  \"amount\": 100.00,\n  \"description\": \"Cash deposit\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719615200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_withdraw",
+      "parentId": "fld_transactions",
+      "modified": 1719615300000,
+      "created": 1719615300000,
+      "url": "{{ _.base_url }}/api/v1/transactions/withdraw",
+      "name": "Withdraw",
+      "description": "Withdraw money from an account",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"accountNumber\": \"ACC12345678\",\n  \"amount\": 50.00,\n  \"description\": \"ATM withdrawal\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719615300000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfer_v2",
+      "parentId": "fld_transactions",
+      "modified": 1719615400000,
+      "created": 1719615400000,
+      "url": "{{ _.base_url }}/api/v1/transactions/transfer",
+      "name": "Transfer Money",
+      "description": "Transfer money between accounts",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"fromAccountNumber\": \"ACC12345678\",\n  \"toAccountNumber\": \"ACC87654321\",\n  \"amount\": 100.00,\n  \"description\": \"Payment\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1719615400000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
       "_id": "fld_general",
       "parentId": "wrk_novabank",
       "modified": 1719611900000,
@@ -348,6 +701,30 @@
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": -1719612000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_accounts",
+      "parentId": "wrk_novabank",
+      "modified": 1719614000000,
+      "created": 1719614000000,
+      "name": "Accounts",
+      "description": "Account management endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1719614000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_transactions",
+      "parentId": "wrk_novabank",
+      "modified": 1719615000000,
+      "created": 1719615000000,
+      "name": "Transactions",
+      "description": "Transaction management endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1719615000000,
       "_type": "request_group"
     },
     {

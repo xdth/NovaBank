@@ -150,11 +150,11 @@ crow::response TransactionController::deposit(const crow::request& req) {
         return errorResponse(400, "Invalid JSON");
     }
     
-    if (!body.has("accountId") || !body.has("amount")) {
-        return errorResponse(400, "Account ID and amount are required");
+    if (!body.has("accountNumber") || !body.has("amount")) {
+        return errorResponse(400, "Account number and amount are required");
     }
     
-    int accountId = body["accountId"].i();
+    std::string accountNumber = body["accountNumber"].s();
     double amount = body["amount"].d();
     std::string description = body.has("description") ? 
         std::string(body["description"].s()) : "Deposit";
@@ -166,7 +166,7 @@ crow::response TransactionController::deposit(const crow::request& req) {
     amount = AccountUtils::roundToTwoDecimals(amount);
     
     // Get account
-    auto account = accountRepository_->findById(accountId);
+    auto account = accountRepository_->findByAccountNumber(accountNumber);
     if (!account) {
         return errorResponse(404, "Account not found");
     }
@@ -177,12 +177,12 @@ crow::response TransactionController::deposit(const crow::request& req) {
     }
     
     // Process deposit
-    if (!processDeposit(accountId, amount, description)) {
+    if (!processDeposit(account->getId(), amount, description)) {
         return errorResponse(500, "Failed to process deposit");
     }
     
     // Get updated account balance
-    account = accountRepository_->findById(accountId);
+    account = accountRepository_->findById(account->getId());
     
     crow::json::wvalue response;
     response["message"] = "Deposit successful";
@@ -203,11 +203,11 @@ crow::response TransactionController::withdraw(const crow::request& req) {
         return errorResponse(400, "Invalid JSON");
     }
     
-    if (!body.has("accountId") || !body.has("amount")) {
-        return errorResponse(400, "Account ID and amount are required");
+    if (!body.has("accountNumber") || !body.has("amount")) {
+        return errorResponse(400, "Account number and amount are required");
     }
     
-    int accountId = body["accountId"].i();
+    std::string accountNumber = body["accountNumber"].s();
     double amount = body["amount"].d();
     std::string description = body.has("description") ? 
         std::string(body["description"].s()) : "Withdrawal";
@@ -219,7 +219,7 @@ crow::response TransactionController::withdraw(const crow::request& req) {
     amount = AccountUtils::roundToTwoDecimals(amount);
     
     // Get account
-    auto account = accountRepository_->findById(accountId);
+    auto account = accountRepository_->findByAccountNumber(accountNumber);
     if (!account) {
         return errorResponse(404, "Account not found");
     }
@@ -242,12 +242,12 @@ crow::response TransactionController::withdraw(const crow::request& req) {
     }
     
     // Process withdrawal
-    if (!processWithdrawal(accountId, amount, description)) {
+    if (!processWithdrawal(account->getId(), amount, description)) {
         return errorResponse(500, "Failed to process withdrawal");
     }
     
     // Get updated account balance
-    account = accountRepository_->findById(accountId);
+    account = accountRepository_->findById(account->getId());
     
     crow::json::wvalue response;
     response["message"] = "Withdrawal successful";
@@ -268,11 +268,11 @@ crow::response TransactionController::transfer(const crow::request& req) {
         return errorResponse(400, "Invalid JSON");
     }
     
-    if (!body.has("fromAccountId") || !body.has("toAccountNumber") || !body.has("amount")) {
-        return errorResponse(400, "From account ID, to account number, and amount are required");
+    if (!body.has("fromAccountNumber") || !body.has("toAccountNumber") || !body.has("amount")) {
+        return errorResponse(400, "From account number, to account number, and amount are required");
     }
     
-    int fromAccountId = body["fromAccountId"].i();
+    std::string fromAccountNumber = body["fromAccountNumber"].s();
     std::string toAccountNumber = body["toAccountNumber"].s();
     double amount = body["amount"].d();
     std::string description = body.has("description") ? 
@@ -285,7 +285,7 @@ crow::response TransactionController::transfer(const crow::request& req) {
     amount = AccountUtils::roundToTwoDecimals(amount);
     
     // Get source account
-    auto fromAccount = accountRepository_->findById(fromAccountId);
+    auto fromAccount = accountRepository_->findByAccountNumber(fromAccountNumber);
     if (!fromAccount) {
         return errorResponse(404, "Source account not found");
     }
@@ -319,12 +319,12 @@ crow::response TransactionController::transfer(const crow::request& req) {
     }
     
     // Process transfer
-    if (!processTransfer(fromAccountId, toAccount->getId(), amount, description)) {
+    if (!processTransfer(fromAccount->getId(), toAccount->getId(), amount, description)) {
         return errorResponse(500, "Failed to process transfer");
     }
     
     // Get updated account balances
-    fromAccount = accountRepository_->findById(fromAccountId);
+    fromAccount = accountRepository_->findById(fromAccount->getId());
     toAccount = accountRepository_->findById(toAccount->getId());
     
     crow::json::wvalue response;

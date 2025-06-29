@@ -78,15 +78,45 @@ std::shared_ptr<sqlite3_stmt> Database::prepare(const std::string& sql) {
 }
 
 bool Database::beginTransaction() {
-    return execute("BEGIN TRANSACTION");
+    char* errMsg = nullptr;
+    int rc = sqlite3_exec(db_, "BEGIN TRANSACTION", nullptr, nullptr, &errMsg);
+    
+    if (rc != SQLITE_OK) {
+        std::string error = errMsg ? errMsg : "Unknown error";
+        sqlite3_free(errMsg);
+        std::cerr << "Failed to begin transaction: " << error << std::endl;
+        return false;
+    }
+    
+    return true;
 }
 
 bool Database::commit() {
-    return execute("COMMIT");
+    char* errMsg = nullptr;
+    int rc = sqlite3_exec(db_, "COMMIT", nullptr, nullptr, &errMsg);
+    
+    if (rc != SQLITE_OK) {
+        std::string error = errMsg ? errMsg : "Unknown error";
+        sqlite3_free(errMsg);
+        std::cerr << "Failed to commit transaction: " << error << std::endl;
+        return false;
+    }
+    
+    return true;
 }
 
 bool Database::rollback() {
-    return execute("ROLLBACK");
+    char* errMsg = nullptr;
+    int rc = sqlite3_exec(db_, "ROLLBACK", nullptr, nullptr, &errMsg);
+    
+    if (rc != SQLITE_OK) {
+        std::string error = errMsg ? errMsg : "Unknown error";
+        sqlite3_free(errMsg);
+        std::cerr << "Failed to rollback transaction: " << error << std::endl;
+        return false;
+    }
+    
+    return true;
 }
 
 std::string Database::getLastError() const {
