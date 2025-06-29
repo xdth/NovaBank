@@ -41,9 +41,13 @@ public:
     // Get last insert row ID
     int64_t getLastInsertId() const;
     
+    // Direct SQLite handle access (for use within transactions)
+    sqlite3* getHandle() const { return db_; }
+    
 private:
     sqlite3* db_;
     mutable std::mutex mutex_;
+    bool inTransaction_ = false;
     
     // Initialize database schema
     bool initializeSchema();

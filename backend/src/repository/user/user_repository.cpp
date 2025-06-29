@@ -16,9 +16,9 @@ std::optional<User> UserRepository::create(const User& user) {
         return std::nullopt;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, user.getUsername().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt.get(), 2, user.getPinHash().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt.get(), 3, userTypeToString(user.getUserType()).c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, user.getUsername().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt.get(), 2, user.getPinHash().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt.get(), 3, userTypeToString(user.getUserType()).c_str(), -1, SQLITE_TRANSIENT);
     
     if (sqlite3_step(stmt.get()) != SQLITE_DONE) {
         std::cerr << "Failed to create user: " << db_->getLastError() << std::endl;
@@ -54,7 +54,7 @@ std::optional<User> UserRepository::findByUsername(const std::string& username) 
         return std::nullopt;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, username.c_str(), -1, SQLITE_TRANSIENT);
     
     if (sqlite3_step(stmt.get()) == SQLITE_ROW) {
         return userFromStatement(stmt.get());
@@ -86,8 +86,8 @@ bool UserRepository::update(const User& user) {
         return false;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, user.getPinHash().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt.get(), 2, userTypeToString(user.getUserType()).c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, user.getPinHash().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt.get(), 2, userTypeToString(user.getUserType()).c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt.get(), 3, user.getId());
     
     return sqlite3_step(stmt.get()) == SQLITE_DONE;
@@ -113,7 +113,7 @@ bool UserRepository::existsByUsername(const std::string& username) {
         return false;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, username.c_str(), -1, SQLITE_TRANSIENT);
     
     if (sqlite3_step(stmt.get()) == SQLITE_ROW) {
         return sqlite3_column_int(stmt.get(), 0) > 0;

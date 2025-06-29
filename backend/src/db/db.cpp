@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-Database::Database(const std::string& dbPath) : db_(nullptr) {
+Database::Database(const std::string& dbPath) : db_(nullptr), inTransaction_(false) {
     int rc = sqlite3_open(dbPath.c_str(), &db_);
     if (rc != SQLITE_OK) {
         std::cerr << "Failed to open database: " << sqlite3_errmsg(db_) << std::endl;
@@ -14,6 +14,9 @@ Database::Database(const std::string& dbPath) : db_(nullptr) {
     
     // Enable foreign keys
     execute("PRAGMA foreign_keys = ON");
+    
+    // Set journal mode for better transaction handling
+    execute("PRAGMA journal_mode = WAL");
     
     // Initialize schema
     if (!initializeSchema()) {
@@ -64,7 +67,10 @@ bool Database::query(const std::string& sql,
 }
 
 std::shared_ptr<sqlite3_stmt> Database::prepare(const std::string& sql) {
-    std::lock_guard<std::mutex> lock(mutex_);
+    // Don't lock if we're already in a transaction (to avoid deadlock)
+    if (!inTransaction_) {
+        std::lock_guard<std::mutex> lock(mutex_);
+    }
     
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr);
@@ -78,6 +84,13 @@ std::shared_ptr<sqlite3_stmt> Database::prepare(const std::string& sql) {
 }
 
 bool Database::beginTransaction() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    
+    if (inTransaction_) {
+        std::cerr << "Already in transaction" << std::endl;
+        return false;
+    }
+    
     char* errMsg = nullptr;
     int rc = sqlite3_exec(db_, "BEGIN TRANSACTION", nullptr, nullptr, &errMsg);
     
@@ -88,10 +101,18 @@ bool Database::beginTransaction() {
         return false;
     }
     
+    inTransaction_ = true;
     return true;
 }
 
 bool Database::commit() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    
+    if (!inTransaction_) {
+        std::cerr << "Not in transaction" << std::endl;
+        return false;
+    }
+    
     char* errMsg = nullptr;
     int rc = sqlite3_exec(db_, "COMMIT", nullptr, nullptr, &errMsg);
     
@@ -102,10 +123,18 @@ bool Database::commit() {
         return false;
     }
     
+    inTransaction_ = false;
     return true;
 }
 
 bool Database::rollback() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    
+    if (!inTransaction_) {
+        std::cerr << "Not in transaction" << std::endl;
+        return false;
+    }
+    
     char* errMsg = nullptr;
     int rc = sqlite3_exec(db_, "ROLLBACK", nullptr, nullptr, &errMsg);
     
@@ -116,6 +145,7 @@ bool Database::rollback() {
         return false;
     }
     
+    inTransaction_ = false;
     return true;
 }
 

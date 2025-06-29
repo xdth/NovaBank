@@ -399,34 +399,49 @@ crow::json::wvalue TransactionController::transactionToJson(const Transaction& t
 bool TransactionController::processDeposit(int accountId, double amount, const std::string& description) {
     // Begin transaction
     if (!db_->beginTransaction()) {
+        std::cerr << "Failed to begin transaction for deposit" << std::endl;
         return false;
     }
     
-    // Get account
-    auto account = accountRepository_->findById(accountId);
-    if (!account) {
+    try {
+        // Get account
+        auto account = accountRepository_->findById(accountId);
+        if (!account) {
+            std::cerr << "Account not found: " << accountId << std::endl;
+            db_->rollback();
+            return false;
+        }
+        
+        // Update account balance
+        account->deposit(amount);
+        if (!accountRepository_->update(*account)) {
+            std::cerr << "Failed to update account balance" << std::endl;
+            db_->rollback();
+            return false;
+        }
+        
+        // Create transaction record
+        Transaction transaction(std::nullopt, accountId, amount, 
+                              TransactionType::Deposit, description);
+        
+        auto createdTransaction = transactionRepository_->create(transaction);
+        if (!createdTransaction) {
+            std::cerr << "Failed to create transaction record" << std::endl;
+            db_->rollback();
+            return false;
+        }
+        
+        if (!db_->commit()) {
+            std::cerr << "Failed to commit transaction" << std::endl;
+            return false;
+        }
+        
+        return true;
+    } catch (const std::exception& e) {
+        std::cerr << "Exception in processDeposit: " << e.what() << std::endl;
         db_->rollback();
         return false;
     }
-    
-    // Update account balance
-    account->deposit(amount);
-    if (!accountRepository_->update(*account)) {
-        db_->rollback();
-        return false;
-    }
-    
-    // Create transaction record
-    Transaction transaction(std::nullopt, accountId, amount, 
-                          TransactionType::Deposit, description);
-    
-    if (!transactionRepository_->create(transaction)) {
-        db_->rollback();
-        return false;
-    }
-    
-    db_->commit();
-    return true;
 }
 
 bool TransactionController::processWithdrawal(int accountId, double amount, const std::string& description) {

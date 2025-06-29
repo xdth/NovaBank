@@ -15,6 +15,7 @@ std::optional<Transaction> TransactionRepository::create(const Transaction& tran
     auto stmt = db_->prepare(sql);
     
     if (!stmt) {
+        std::cerr << "Failed to prepare transaction insert statement" << std::endl;
         return std::nullopt;
     }
     
@@ -33,16 +34,21 @@ std::optional<Transaction> TransactionRepository::create(const Transaction& tran
     }
     
     sqlite3_bind_double(stmt.get(), 3, transaction.getAmount());
-    sqlite3_bind_text(stmt.get(), 4, transactionTypeToString(transaction.getTransactionType()).c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt.get(), 5, transaction.getDescription().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt.get(), 6, transactionStatusToString(transaction.getStatus()).c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 4, transactionTypeToString(transaction.getTransactionType()).c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt.get(), 5, transaction.getDescription().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt.get(), 6, transactionStatusToString(transaction.getStatus()).c_str(), -1, SQLITE_TRANSIENT);
     
-    if (sqlite3_step(stmt.get()) != SQLITE_DONE) {
-        std::cerr << "Failed to create transaction: " << db_->getLastError() << std::endl;
+    int rc = sqlite3_step(stmt.get());
+    if (rc != SQLITE_DONE) {
+        std::cerr << "Failed to create transaction: " << db_->getLastError() 
+                  << " (rc=" << rc << ")" << std::endl;
         return std::nullopt;
     }
     
-    return findById(db_->getLastInsertId());
+    int64_t newId = db_->getLastInsertId();
+    std::cout << "Transaction created with ID: " << newId << std::endl;
+    
+    return findById(newId);
 }
 
 std::optional<Transaction> TransactionRepository::findById(int id) {
@@ -175,7 +181,7 @@ bool TransactionRepository::updateStatus(int id, TransactionStatus status) {
         return false;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, transactionStatusToString(status).c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, transactionStatusToString(status).c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt.get(), 2, id);
     
     return sqlite3_step(stmt.get()) == SQLITE_DONE;

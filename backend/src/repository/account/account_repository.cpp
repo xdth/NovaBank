@@ -17,8 +17,8 @@ std::optional<Account> AccountRepository::create(const Account& account) {
     }
     
     sqlite3_bind_int(stmt.get(), 1, account.getUserId());
-    sqlite3_bind_text(stmt.get(), 2, account.getAccountNumber().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt.get(), 3, accountTypeToString(account.getAccountType()).c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 2, account.getAccountNumber().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt.get(), 3, accountTypeToString(account.getAccountType()).c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_double(stmt.get(), 4, account.getBalance());
     
     if (sqlite3_step(stmt.get()) != SQLITE_DONE) {
@@ -55,7 +55,7 @@ std::optional<Account> AccountRepository::findByAccountNumber(const std::string&
         return std::nullopt;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, accountNumber.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, accountNumber.c_str(), -1, SQLITE_TRANSIENT);
     
     if (sqlite3_step(stmt.get()) == SQLITE_ROW) {
         return accountFromStatement(stmt.get());
@@ -95,6 +95,7 @@ std::vector<Account> AccountRepository::findAll() {
 
 bool AccountRepository::update(const Account& account) {
     if (!account.isValid() || account.getId() <= 0) {
+        std::cerr << "Invalid account for update" << std::endl;
         return false;
     }
     
@@ -102,13 +103,20 @@ bool AccountRepository::update(const Account& account) {
     auto stmt = db_->prepare(sql);
     
     if (!stmt) {
+        std::cerr << "Failed to prepare account update statement" << std::endl;
         return false;
     }
     
     sqlite3_bind_double(stmt.get(), 1, account.getBalance());
     sqlite3_bind_int(stmt.get(), 2, account.getId());
     
-    return sqlite3_step(stmt.get()) == SQLITE_DONE;
+    int rc = sqlite3_step(stmt.get());
+    if (rc != SQLITE_DONE) {
+        std::cerr << "Failed to execute account update: " << sqlite3_errmsg(sqlite3_db_handle(stmt.get())) << std::endl;
+        return false;
+    }
+    
+    return true;
 }
 
 bool AccountRepository::deleteById(int id) {
@@ -131,7 +139,7 @@ bool AccountRepository::existsByAccountNumber(const std::string& accountNumber) 
         return false;
     }
     
-    sqlite3_bind_text(stmt.get(), 1, accountNumber.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt.get(), 1, accountNumber.c_str(), -1, SQLITE_TRANSIENT);
     
     if (sqlite3_step(stmt.get()) == SQLITE_ROW) {
         return sqlite3_column_int(stmt.get(), 0) > 0;

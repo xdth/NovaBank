@@ -178,6 +178,14 @@ Import `NovaBank_Insomnia_Collection.json` into Insomnia for complete API testin
 - `status` - pending/completed/failed
 - `created_at` - Transaction timestamp
 
+## Roadmap
+
+* [ ] Enforce unified code style with **clang-format** (`.clang-format` in repo; auto-format on save recommended)
+* [ ] Run **clang-tidy** for static analysis and code quality checks (`.clang-tidy` config in repo)
+* [ ] Add unit tests using **Catch2**
+* [ ] Generate **HTML code coverage reports** (via `gcov`/`lcov` or `llvm-cov` + Catch2 tests)
+* [ ] Integrate formatting, linting, and testing into CI in future
+
 ## 🤝 Contributing
 
 1. Fork the repository
