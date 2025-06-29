@@ -6,9 +6,7 @@
 // Include controllers
 #include "api/user/user_controller.h"
 #include "api/account/account_controller.h"
-
-// Forward declarations for components we'll add later
-// #include "api/transaction/transaction_controller.h"
+#include "api/transaction/transaction_controller.h"
 
 int main() {
     // Initialize Crow app with CORS middleware
@@ -85,9 +83,8 @@ int main() {
     AccountController accountController(db);
     accountController.registerRoutes(app);
     
-    // TODO: Register other controllers
-    // TransactionController transactionController(db);
-    // transactionController.registerRoutes(app);
+    TransactionController transactionController(db);
+    transactionController.registerRoutes(app);
     
     // Start server
     app.port(8080)

@@ -41,14 +41,17 @@ set(SOURCES
     # Domain models
     src/domain/user/user.cpp
     src/domain/account/account.cpp
+    src/domain/transaction/transaction.cpp
     
     # Repositories
     src/repository/user/user_repository.cpp
     src/repository/account/account_repository.cpp
+    src/repository/transaction/transaction_repository.cpp
     
     # API Controllers
     src/api/user/user_controller.cpp
     src/api/account/account_controller.cpp
+    src/api/transaction/transaction_controller.cpp
     # src/domain/account/account.cpp
     # src/domain/transaction/transaction.cpp
     

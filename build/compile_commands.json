@@ -1,0 +1,57 @@
+[
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/main.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/main.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/main.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/db/db.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/db/db.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/db/db.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/domain/user/user.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/domain/user/user.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/domain/user/user.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/domain/account/account.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/domain/account/account.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/domain/account/account.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/domain/transaction/transaction.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/domain/transaction/transaction.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/domain/transaction/transaction.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/repository/user/user_repository.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/repository/user/user_repository.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/repository/user/user_repository.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/repository/account/account_repository.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/repository/account/account_repository.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/repository/account/account_repository.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/repository/transaction/transaction_repository.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/repository/transaction/transaction_repository.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/repository/transaction/transaction_repository.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/api/user/user_controller.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/api/user/user_controller.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/api/user/user_controller.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/api/account/account_controller.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/api/account/account_controller.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/api/account/account_controller.cpp"
+},
+{
+  "directory": "/home/dth/dev/repos/github/NovaBank/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_DATE_TIME_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/home/dth/dev/repos/github/NovaBank/backend/src -I/home/dth/dev/repos/github/NovaBank/build/_deps/crow-src/include -g -std=gnu++17 -o CMakeFiles/novabank.dir/src/api/transaction/transaction_controller.cpp.o -c /home/dth/dev/repos/github/NovaBank/backend/src/api/transaction/transaction_controller.cpp",
+  "file": "/home/dth/dev/repos/github/NovaBank/backend/src/api/transaction/transaction_controller.cpp"
+}
+]
