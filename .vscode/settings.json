@@ -1,4 +1,3 @@
 {
-  "cmake.sourceDirectory": "/home/dth/dev/repos/github/NovaBank/backend",
-  "C_Cpp.default.compilerPath": "/usr/bin/g++"
+  "cmake.sourceDirectory": "/home/dth/dev/repos/github/NovaBank/backend"
 }
