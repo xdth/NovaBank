@@ -26,6 +26,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "_type": "request"
+    },
     {
       "_id": "req_admin_users",
       "parentId": "fld_admin",
