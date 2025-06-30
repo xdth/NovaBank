@@ -24,16 +24,19 @@ A modern simulated banking platform built with C++ (backend) and React (frontend
   - Transaction history with filtering
   - Transaction validation and atomic operations
 
+- **Admin Operations**
+  - View all users with account balances
+  - System-wide balance tracking
+  - Admin deposits to any account
+  - Admin withdrawals from any account
+  - Admin transfers between any accounts
+  - Admin action attribution
+
 - **Security**
   - SHA256 PIN hashing
   - Bearer token authentication
   - Role-based endpoint protection
   - Session timeout
-
-### 🚧 In Progress
-- Admin dashboard endpoints
-- Account statements
-- Transaction receipts
 
 ### 📋 Planned
 - React frontend
@@ -125,7 +128,7 @@ The server will start on `http://localhost:8080`
 - `GET /api/v1/accounts` - List accounts
 - `GET /api/v1/accounts/:id` - Get account details
 - `POST /api/v1/accounts` - Create account
-- `POST /api/v1/accounts/:id/transfer` - Transfer money
+- `POST /api/v1/accounts/:id/transfer` - Transfer money (deprecated, use /transactions/transfer)
 
 ### Transactions
 - `GET /api/v1/transactions` - Transaction history
@@ -133,6 +136,12 @@ The server will start on `http://localhost:8080`
 - `POST /api/v1/transactions/deposit` - Deposit money
 - `POST /api/v1/transactions/withdraw` - Withdraw money
 - `POST /api/v1/transactions/transfer` - Transfer money
+
+### Admin
+- `GET /api/v1/admin/users` - List all users with balances (admin)
+- `POST /api/v1/admin/deposit` - Admin deposit to any account
+- `POST /api/v1/admin/withdraw` - Admin withdraw from any account
+- `POST /api/v1/admin/transfer` - Admin transfer between accounts
 
 ## 🧪 Testing
 
@@ -146,10 +155,19 @@ The server will start on `http://localhost:8080`
 
 # Test transactions
 ./test_transactions.sh
+
+# Test admin operations
+./test_admin.sh
 ```
 
 ### API Testing
 Import `NovaBank_Insomnia_Collection.json` into Insomnia for complete API testing.
+
+### Quick Test
+Run all tests in sequence:
+```bash
+./test_auth.sh && ./test_accounts.sh && ./test_transactions.sh && ./test_admin.sh
+```
 
 ## 📊 Database Schema
 
@@ -178,13 +196,27 @@ Import `NovaBank_Insomnia_Collection.json` into Insomnia for complete API testin
 - `status` - pending/completed/failed
 - `created_at` - Transaction timestamp
 
-## Roadmap
+## 🏦 Business Rules
 
-* [ ] Enforce unified code style with **clang-format** (`.clang-format` in repo; auto-format on save recommended)
-* [ ] Run **clang-tidy** for static analysis and code quality checks (`.clang-tidy` config in repo)
-* [ ] Add unit tests using **Catch2**
-* [ ] Generate **HTML code coverage reports** (via `gcov`/`lcov` or `llvm-cov` + Catch2 tests)
-* [ ] Integrate formatting, linting, and testing into CI in future
+### Account Types
+- **Checking Account**: No minimum balance requirement
+- **Savings Account**: Must maintain $25 minimum balance
+
+### Transaction Rules
+- All amounts must be positive
+- Maximum 2 decimal places for currency
+- Deposits: Create money in the system (admin or user initiated)
+- Withdrawals: Remove money from the system
+- Transfers: Move money between accounts (no system balance change)
+
+### User Roles
+- **Standard User**: Can manage own accounts and transactions
+- **Admin User**: Full system access, can manage all users and accounts
+
+### Session Management
+- Sessions expire after 30 minutes of inactivity
+- Each login generates a new session token
+- Tokens must be included in Authorization header as `Bearer TOKEN`
 
 ## 🤝 Contributing
 
@@ -206,8 +238,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Contact
 
-dth 
-#Linux
-irc.alterland.net
+Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
 
-Project Link: [https://github.com/xdth/NovaBank](https://github.com/xdth/NovaBank)
+Project Link: [https://github.com/yourusername/NovaBank](https://github.com/yourusername/NovaBank)

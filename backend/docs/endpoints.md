@@ -472,6 +472,137 @@ Content-Type: application/json
 }
 ```
 
+### 🔧 Admin Management (Admin Only)
+
+#### Get All Users with Balances
+```http
+GET /api/v1/admin/users
+Authorization: Bearer YOUR_TOKEN
+```
+**Note:** Admin only endpoint that shows detailed user information with account balances
+
+**Response:**
+```json
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "userType": "admin",
+      "createdAt": "2025-06-28 21:51:49",
+      "accounts": [
+        {
+          "id": 1,
+          "accountNumber": "ACC12345678",
+          "accountType": "checking",
+          "balance": 1000.0,
+          "formattedBalance": "$1000.00"
+        }
+      ],
+      "accountCount": 1,
+      "totalBalance": 1000.0,
+      "formattedTotalBalance": "$1000.00"
+    }
+  ],
+  "systemTotalBalance": 1000.0,
+  "formattedSystemTotal": "$1000.00",
+  "userCount": 1
+}
+```
+
+#### Admin Deposit
+```http
+POST /api/v1/admin/deposit
+Authorization: Bearer YOUR_TOKEN
+Content-Type: application/json
+
+{
+  "accountNumber": "ACC12345678",
+  "amount": 100.00,
+  "description": "Admin deposit"  // optional
+}
+```
+**Response:**
+```json
+{
+  "message": "Admin deposit successful",
+  "transactionDetails": {
+    "accountNumber": "ACC12345678",
+    "accountType": "checking",
+    "username": "john_doe",
+    "amount": 100.0,
+    "newBalance": 1100.0,
+    "formattedBalance": "$1100.00",
+    "description": "Admin deposit",
+    "adminUser": "admin"
+  }
+}
+```
+
+#### Admin Withdraw
+```http
+POST /api/v1/admin/withdraw
+Authorization: Bearer YOUR_TOKEN
+Content-Type: application/json
+
+{
+  "accountNumber": "ACC12345678",
+  "amount": 50.00,
+  "description": "Admin withdrawal"  // optional
+}
+```
+**Response:**
+```json
+{
+  "message": "Admin withdrawal successful",
+  "transactionDetails": {
+    "accountNumber": "ACC12345678",
+    "accountType": "checking",
+    "username": "john_doe",
+    "amount": 50.0,
+    "newBalance": 1050.0,
+    "formattedBalance": "$1050.00",
+    "description": "Admin withdrawal",
+    "adminUser": "admin"
+  }
+}
+```
+
+#### Admin Transfer
+```http
+POST /api/v1/admin/transfer
+Authorization: Bearer YOUR_TOKEN
+Content-Type: application/json
+
+{
+  "fromAccountNumber": "ACC12345678",
+  "toAccountNumber": "ACC87654321",
+  "amount": 100.00,
+  "description": "Admin transfer"  // optional
+}
+```
+**Response:**
+```json
+{
+  "message": "Admin transfer successful",
+  "transferDetails": {
+    "from": {
+      "accountNumber": "ACC12345678",
+      "username": "john_doe",
+      "newBalance": 950.0
+    },
+    "to": {
+      "accountNumber": "ACC87654321",
+      "username": "jane_doe",
+      "newBalance": 100.0
+    },
+    "amount": 100.0,
+    "description": "Admin transfer",
+    "adminUser": "admin"
+  }
+}
+```
+
 All errors follow this format:
 ```json
 {
