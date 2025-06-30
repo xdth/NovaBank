@@ -7,6 +7,7 @@
 #include "api/user/user_controller.h"
 #include "api/account/account_controller.h"
 #include "api/transaction/transaction_controller.h"
+#include "api/admin/admin_controller.h"
 
 int main() {
     // Initialize Crow app with CORS middleware
@@ -85,6 +86,9 @@ int main() {
     
     TransactionController transactionController(db);
     transactionController.registerRoutes(app);
+    
+    AdminController adminController(db);
+    adminController.registerRoutes(app);
     
     // Start server
     app.port(8080)

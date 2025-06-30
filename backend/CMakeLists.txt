@@ -52,6 +52,7 @@ set(SOURCES
     src/api/user/user_controller.cpp
     src/api/account/account_controller.cpp
     src/api/transaction/transaction_controller.cpp
+    src/api/admin/admin_controller.cpp
     # src/domain/account/account.cpp
     # src/domain/transaction/transaction.cpp
     
