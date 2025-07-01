@@ -4,6 +4,8 @@
 
 echo "🏦 Setting up NovaBank Backend Development Environment..."
 
+cd ~/dev/repos/github/NovaBank/backend/build
+
 # Detect OS
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Linux
