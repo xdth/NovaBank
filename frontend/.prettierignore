@@ -1,0 +1,7 @@
+dist
+build
+coverage
+public
+.husky
+*.config.js
+*.config.ts
