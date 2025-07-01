@@ -55,7 +55,7 @@ A modern simulated banking platform built with C++ (backend) and React (frontend
 
 ### Frontend (Planned)
 - **Framework:** React with TypeScript
-- **UI Library:** Tailwind CSS
+- **UI Library:** MUI 7
 - **State Management:** Context API
 - **HTTP Client:** Axios
 
