@@ -238,6 +238,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
+dth - #Linux - irc.alterland.net
 
-Project Link: [https://github.com/yourusername/NovaBank](https://github.com/yourusername/NovaBank)
+Project Link: [https://github.com/xdth/NovaBank](https://github.com/xdth/NovaBank)
